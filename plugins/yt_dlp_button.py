@@ -79,6 +79,7 @@ async def yt_dlp_call_back(bot, update):
         if len(url_parts) == 2:
             yt_dlp_url = url_parts[0]
             custom_file_name = url_parts[1]
+            caption = custom_file_name
         elif len(url_parts) == 4:
             yt_dlp_url = url_parts[0]
             custom_file_name = url_parts[1]
@@ -100,8 +101,16 @@ async def yt_dlp_call_back(bot, update):
             yt_dlp_username = yt_dlp_username.strip()
         if yt_dlp_password is not None:
             yt_dlp_password = yt_dlp_password.strip()
-
+        LOGGER.info(yt_dlp_url)
+        LOGGER.info(custom_file_name)
     else:
+        if "fulltitle" in response_json:
+           title = response_json["fulltitle"][0:1021]
+           if "description" in response_json:
+               description = response_json["description"][0:1021]
+               caption = title + "\n\n" + description
+           else:
+               caption = title
         for entity in update.message.reply_to_message.entities:
             if entity.type == "text_link":
                 yt_dlp_url = entity.url
@@ -116,16 +125,6 @@ async def yt_dlp_call_back(bot, update):
         parse_mode="html",
         message_id=update.message.message_id
     )
-
-    if "fulltitle" in response_json:
-        title = response_json["fulltitle"][0:1021]
-        if "description" in response_json:
-            description = response_json["description"][0:1021]
-            caption = title + "\n\n" + description
-        else:
-            caption = title
-    else:
-        caption = custom_file_name
 
     tmp_directory_for_each_user = os.path.join(
         DOWNLOAD_LOCATION,
@@ -278,8 +277,9 @@ async def yt_dlp_call_back(bot, update):
                 pass
 
             start_time = time.time()
+            user = await bot.get_me()
             btn = [[
-                InlineKeyboardButton(f"Upload By {update.from_user.id}", url=f"tg://user?id={update.from_user.id}")
+                InlineKeyboardButton(f"Upload By {user.first_name}", url=f"tg://user?id={user.id}")
             ]]
             reply_markup = InlineKeyboardMarkup(btn)
 
@@ -292,7 +292,7 @@ async def yt_dlp_call_back(bot, update):
                     thumb=thumbnail,
                     caption=caption,
                     reply_to_message_id=update.message.reply_to_message.message_id,
-                    # reply_markup=reply_markup,
+                    reply_markup=reply_markup,
                     progress=progress_for_pyrogram,
                     progress_args=(
                         Translation.UPLOAD_START,
@@ -317,7 +317,7 @@ async def yt_dlp_call_back(bot, update):
                     width=width,
                     height=height,
                     supports_streaming=True,
-                    # reply_markup=reply_markup,
+                    reply_markup=reply_markup,
                     thumb=thumb_image_path,
                     reply_to_message_id=update.message.reply_to_message.message_id,
                     progress=progress_for_pyrogram,
@@ -343,7 +343,7 @@ async def yt_dlp_call_back(bot, update):
                     duration=duration,
                     thumb=thumbnail,
                     reply_to_message_id=update.message.reply_to_message.message_id,
-                    # reply_markup=reply_markup,
+                    reply_markup=reply_markup,
                     progress=progress_for_pyrogram,
                     progress_args=(
                         Translation.UPLOAD_START,
@@ -364,7 +364,7 @@ async def yt_dlp_call_back(bot, update):
                     length=width,
                     thumb=thumbnail,
                     reply_to_message_id=update.message.reply_to_message.message_id,
-                    # reply_markup=reply_markup,
+                    reply_markup=reply_markup,
                     progress=progress_for_pyrogram,
                     progress_args=(
                         Translation.UPLOAD_START,
