@@ -81,7 +81,7 @@ HEROKU_APP_NAME = environ.get('HEROKU_APP_NAME', None)
 HEROKU_API_KEY = environ.get('HEROKU_API_KEY', None)
 
 # Advertisement
-PROMO = bool(environ.get("PROMO", True))
+PROMO = str(environ.get("PROMO", "True"))
 
 # Other
 SEND_LOGS_WHEN_DYING = str(environ.get("SEND_LOGS_WHEN_DYING", "True")).lower() == 'true'
