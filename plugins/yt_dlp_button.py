@@ -296,13 +296,13 @@ async def yt_dlp_call_back(bot, update):
                 BotMention = user["mention"]
                 UserMention = update.from_user.mention
 
-                if PROMO is True:
+                if PROMO:
                     caption += Translation.UPLOADER.format(UserMention, BotMention)
                     btn = [[
                         InlineKeyboardButton(f"Uploaded By {user.first_name}", url=f"tg://user?id={user.id}")
                     ]]
                     reply_markup = InlineKeyboardMarkup(btn)
-                elif PROMO is False:
+                else:
                     reply_markup = False
 
                 try:
