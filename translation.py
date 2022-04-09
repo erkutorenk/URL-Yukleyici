@@ -32,8 +32,7 @@ Bu Botu kullanarak HTTP/HTTPS bağlantılarını yükleyebilirsiniz!"""
 Bot cevap vermediyse @thebans ile iletişime geçin"""
     HELP_BUTTONS = InlineKeyboardMarkup(
         [[
-            InlineKeyboardButton('🔙 Geri', callback_data='home'),
-            InlineKeyboardButton('✖ Kapat', callback_data='close')
+            InlineKeyboardButton('🔙 Geri', callback_data='home')
         ]]
     )
     UPLOADER = "\n\n© {} tarafından {} kullanılarak yüklendi."
