@@ -254,8 +254,13 @@ async def yt_dlp_call_back(bot, update):
                 download_directory_dirname,
                 download_directory_c
             )
-
-            file_size = os.stat(current_file_name).st_size
+       
+            try:
+                file_size = os.stat(current_file_name).st_size
+            except FileNotFoundError as exc:
+                download_directory = os.path.splitext(current_file_name)[0] + "." + "mkv"
+                # https://stackoverflow.com/a/678242/4723940
+                file_size = os.stat(download_directory).st_size
 
             try:
                 if tg_send_type == 'video' and 'webm' in current_file_name:
